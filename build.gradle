@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+ext {
+    encoding = 'UTF-8'
+    javaVersion = JavaVersion.VERSION_11
+    //pathLicense = file "$projectDir/LICENSE"
+}
+
+group 'raystark'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = project.javaVersion
+targetCompatibility = project.javaVersion
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+}
+
+javadoc {
+    options.encoding = project.encoding
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set 'javadoc'
+    from javadoc
+}
+
+task sourceJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set 'source'
+    from sourceSets.main.allSource
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = project.encoding
+}
