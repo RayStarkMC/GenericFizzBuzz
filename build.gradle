@@ -5,7 +5,7 @@ plugins {
 ext {
     encoding = 'UTF-8'
     javaVersion = JavaVersion.VERSION_11
-    //pathLicense = file "$projectDir/LICENSE"
+    pathLicense = file "$projectDir/LICENSE"
 }
 
 group 'raystark'
@@ -23,10 +23,6 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:16.0.2'
 }
 
-javadoc {
-    options.encoding = project.encoding
-}
-
 task javadocJar(type: Jar) {
     archiveClassifier.set 'javadoc'
     from javadoc
@@ -37,6 +33,18 @@ task sourceJar(type: Jar, dependsOn: javadoc) {
     from sourceSets.main.allSource
 }
 
+javadoc {
+    options.encoding = project.encoding
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = project.encoding
+}
+
+tasks.withType(Jar) {
+    from project.pathLicense
+}
+
+build {
+    dependsOn sourceJar, javadocJar
 }
